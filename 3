@@ -21,11 +21,11 @@ class Board
     end
   end
 
-  def play(current = @last_player)
+  def play(current = nil)
+    continue_query
     current ||= "white"
     until checkmate?(current)
-      turn(current)
-      traverse { |node| set_moves(node) }
+      set_moves(turn(current))
       current == "white" ? current = "black" : current = "white"
       if op_in_check?(current)
         puts "black team is in check" if current == "white"
@@ -38,7 +38,6 @@ class Board
   end
 
   def op_in_check?(team)
-    king = nil
     traverse do |node|
       if node&.piece_held.class == King && node&.piece_held.team != team
         king = node
@@ -46,8 +45,8 @@ class Board
     end
 
     traverse do |node|
-      if !node.piece_held.nil?
-        return true if node.piece_held.moves.any?(king)
+      if node&.piece_held&.moves&.any?(node)
+        return true
       end
     end
 
@@ -76,18 +75,18 @@ class Board
     team_pieces = find_op_team_pieces(team)
 
     if king_threats.length > 1 && king_safe_moves.length == 0
-      #p "1"
+      p "1"
       return true
     elsif king_safe_moves.length >= 1
-      #p "2"
+      p "2"
       return false
     else
       if team_pieces.any? { |piece| piece&.moves&.any? { |move| move == king_threats[0] } }
-        #p "3"
+      p "3"
         return false
-      elsif king_safe_moves.length == 0 && op_in_check?(team)
-        #p "4"
-        return true
+      else
+      p "4"
+        return false
       end
     end
   end
@@ -239,20 +238,18 @@ class Board
     node.piece_held.moves = pointer_arr
   end
 
-  #def continue_query
-  #  puts "Continue previous game? y/n: "
-  #  answer = gets.chomp.downcase
-  #  until answer == "y" || answer == "n"
-  #    puts "Try again: "
-  #    answer = gets.chomp.downcase
-  #  end
-  #  if answer == "y"
-  #    serialized = File.read('save.rb')
-  #    self = Marshal::load(serialized)
-
-  #    exit 0
-  #  end
-  #end
+  def continue_query
+    puts "Continue previous game? y/n: "
+    answer = gets.chomp.downcase
+    until answer == "y" || answer == "n"
+      puts "Try again: "
+      answer = gets.chomp.downcase
+    end
+    if answer == "y"
+      serialized = File.read('save.rb')
+      game = Marshal::load(serialized)
+    end
+  end
 
   def save_game(team)
     @last_player = team
@@ -267,7 +264,7 @@ class Board
 
   def turn(team)
     to_s
-    puts "\nSelect a piece or type \"save\" to save. #{team}'s turn:\n\n"
+    puts "\nSelect a piece, or type \"save\": #{team}:\n\n"
 
     player_choice = gets.chomp
 
@@ -331,6 +328,7 @@ class Board
     selected_node_two.piece_held = selected_node.piece_held
     selected_node_two.piece_held.node = selected_node_two
     selected_node.piece_held = nil
+    return selected_node_two
   end
 
   def to_s

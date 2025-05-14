@@ -23,18 +23,18 @@ class Board
         Node.new([2,7], "bishop"),
       ].flatten,
       [
-        Node.new([3,0], "king"),
+        Node.new([3,0], "queen"),
         Node.new([3,1], "pawn"),
         Array.new(4) { |node| node = Node.new([3, node+2]) },
         Node.new([3,6], "pawn"),
-        Node.new([3,7], "king"),
+        Node.new([3,7], "queen"),
       ].flatten,
       [
-        Node.new([4,0], "queen"),
+        Node.new([4,0], "king"),
         Node.new([4,1], "pawn"),
         Array.new(4) { |node| node = Node.new([4, node+2]) },
         Node.new([4,6], "pawn"),
-        Node.new([4,7], "queen"),
+        Node.new([4,7], "king"),
       ].flatten,
       [
         Node.new([5,0], "bishop"),
@@ -59,5 +59,4 @@ class Board
       ].flatten,
     ]
   end
-
 end

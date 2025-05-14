@@ -6,7 +6,7 @@ class Piece
     @team = team
     @node = node
     @moves = moves
-    @team == "white" ? @symbol = :+ : @symbol =  :-
+    @team == "white" ? @symbol = :+ : @symbol = :-
   end
 
 
@@ -61,8 +61,12 @@ class King < Piece
     [
       [ x + 1, y ],
       [ x - 1, y ],
-      [ x , y + 1],
-      [ x , y - 1]
+      [ x, y + 1],
+      [ x, y - 1],
+      [ x + 1, y + 1 ],
+      [ x - 1, y + 1 ],
+      [ x + 1, y - 1],
+      [ x - 1, y - 1]
     ]
   end
 end
@@ -186,17 +190,17 @@ class Rook < Piece
         end
       when 1
         7.times do
-        arr[0] << [a, (b - 1)]
+        arr[1] << [a, (b - 1)]
         b -= 1
         end
       when 2
         7.times do
-        arr[0] << [(a + 1), b]
+        arr[2] << [(a + 1), b]
         a += 1
         end
       when 3
         7.times do
-        arr[0] << [(a - 1), b]
+        arr[3] << [(a - 1), b]
         a -= 1
         end
       end
