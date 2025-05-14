@@ -13,9 +13,9 @@ def continue_query
   if answer == "y"
     serialized = File.read('save.rb')
     game_one = Marshal::load(serialized)
-    game_one.play
+    game_one.choose_type
   end
 end
 
 continue_query
-game_one.play
+game_one.choose_type

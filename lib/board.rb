@@ -21,6 +21,26 @@ class Board
     end
   end
 
+  def choose_type
+    puts "Choose a game:"
+    puts "1: Player vs. Player"
+    puts "2: Player vs. Cpu"
+
+    input = gets.chomp
+
+    until input == "1" || input == "2"
+      puts "Invalid: Try again."
+      input = gets.chomp
+    end
+
+    case input
+    when "1"
+      play
+    when "2"
+      play_computer
+    end
+  end
+
   def play(current = @last_player)
     current ||= "white"
     until checkmate?(current)
@@ -35,6 +55,43 @@ class Board
     current == "P1" ? current = "P2" : current = "P1"
     puts "#{current} won! The other one sucks!\n\n"
     to_s
+  end
+
+  def play_computer()
+    loop do
+      turn("white")
+      traverse { |node| set_moves(node) }
+      @last_player = "white"
+      if op_in_check?("white")
+        puts "black team is in check"
+      end
+      break if checkmate?("white")
+      computer_turn("black")
+      @last_player = "black"
+      if op_in_check?("black")
+        puts "white team is in check"
+      end
+      break if checkmate?("black")
+    end
+    to_s
+    puts @last_player == "white" ? "You win!" : "Cpu wins."
+  end
+
+  def computer_turn(team)
+    nodes_with_moves = []
+    traverse do |node|
+      if !node.piece_held.nil? && node.piece_held.moves.length > 0 && node.piece_held.team == team
+        nodes_with_moves << node
+      end
+    end
+
+    selected_node = nodes_with_moves[rand(nodes_with_moves.length)]
+    piece = selected_node.piece_held
+    selected_node_two = piece.moves[rand(piece.moves.length)]
+
+    selected_node_two.piece_held = piece
+    selected_node.piece_held = nil
+    piece.node = selected_node_two
   end
 
   def op_in_check?(team)
@@ -238,21 +295,6 @@ class Board
 
     node.piece_held.moves = pointer_arr
   end
-
-  #def continue_query
-  #  puts "Continue previous game? y/n: "
-  #  answer = gets.chomp.downcase
-  #  until answer == "y" || answer == "n"
-  #    puts "Try again: "
-  #    answer = gets.chomp.downcase
-  #  end
-  #  if answer == "y"
-  #    serialized = File.read('save.rb')
-  #    self = Marshal::load(serialized)
-
-  #    exit 0
-  #  end
-  #end
 
   def save_game(team)
     @last_player = team
