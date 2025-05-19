@@ -52,6 +52,7 @@ class Board
         puts "white team is in check" if current == "black"
       end
     end
+    traverse { |node| set_moves(node) }
     current == "P1" ? current = "P2" : current = "P1"
     puts "#{current} won! The other one sucks!\n\n"
     to_s
@@ -66,6 +67,7 @@ class Board
         puts "black team is in check"
       end
       break if checkmate?("white")
+      traverse { |node| set_moves(node) }
       computer_turn("black")
       @last_player = "black"
       if op_in_check?("black")
@@ -359,10 +361,11 @@ class Board
     end
 
     until selected_node_two&.piece_held.nil? && selected_node.piece_held.moves.any?(selected_node_two)
-      until selected_node_two.piece_held.team == team
-        puts "Invalid choice"
+      until selected_node_two&.piece_held&.team == team
+        puts "Try again:"
+        next_node = ""
         until next_node&.match(/[a-h][1-8]/)
-          puts "Invalid format"
+          #puts "Invalid format"
           next_node = gets.chomp
           x = (next_node[0].ord - 49).chr.to_i
           y = (next_node[1].ord - 1).chr.to_i

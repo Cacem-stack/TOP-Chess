@@ -89,35 +89,35 @@ class Queen < Piece
         end
       when 1
         7.times do
-        arr[0] << [(a - 1), (b + 1)]
+        arr[1] << [(a - 1), (b + 1)]
         a -= 1
         b += 1
         end
       when 2
         7.times do
-        arr[0] << [(a + 1), (b - 1)]
+        arr[2] << [(a + 1), (b - 1)]
         a += 1
         b -= 1
         end
       when 3
         7.times do
-        arr[0] << [(a - 1), (b - 1)]
+        arr[3] << [(a - 1), (b - 1)]
         a -= 1
         b -= 1
         end
       when 4
         7.times do
-        arr[0] << [a, (b + 1)]
+        arr[4] << [a, (b + 1)]
         b += 1
         end
       when 5
         7.times do
-        arr[0] << [a, (b - 1)]
+        arr[5] << [a, (b - 1)]
         b -= 1
         end
       when 6
         7.times do
-        arr[0] << [(a + 1), b]
+        arr[6] << [(a + 1), b]
         a += 1
         end
       when 7
@@ -150,19 +150,19 @@ class Bishop < Piece
         end
       when 1
         7.times do
-        arr[0] << [(a - 1), (b + 1)]
+        arr[1] << [(a - 1), (b + 1)]
         a -= 1
         b += 1
         end
       when 2
         7.times do
-        arr[0] << [(a + 1), (b - 1)]
+        arr[2] << [(a + 1), (b - 1)]
         a += 1
         b -= 1
         end
       when 3
         7.times do
-        arr[0] << [(a - 1), (b - 1)]
+        arr[3] << [(a - 1), (b - 1)]
         a -= 1
         b -= 1
         end
