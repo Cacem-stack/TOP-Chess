@@ -373,6 +373,37 @@ describe Board do
     end
   end
 
+  #describe "Additional Pawn Testing:" do
+  #  context "When opponent is within pawns' wrath" do
+  #    subject(:pawn_board) { described_class.new }
+  #    xit "Allows pawn to eat opponent" do
+  #      field = pawn_board.field
+
+  #      field.each_with_index do |arr, x|
+  #        arr.each_with_index do |elem, y|
+  #          field[x][y] = Node.new([x, y])
+  #        end
+  #      end
+
+  #      #5,3 6,3W 6,4B
+  #      field[5][3].piece_held = Pawn.new("white", field[5][3])
+  #      field[6][3].piece_held = Pawn.new("white", field[6][3])
+  #      field[6][4].piece_held = Pawn.new("black", field[6][4])
+
+  #      pawn1 = field[5][3].piece_held
+  #      pawn2 = field[6][3].piece_held
+  #      pawn3 = field[6][4].piece_held
+
+  #      pawn_board.traverse { |node| pawn_board.set_moves(node) }
+  #      pawn_board.to_s
+  #      print "\nPawn one: #{pawn1.moves.map(&:index)}\n"
+  #      print "\nPawn two: #{pawn2.moves.map(&:index)}\n"
+  #      print "\nPawn three: #{pawn3.moves.map(&:index)}\n"
+
+  #    end
+  #  end
+  #end
+
   #describe "-DEBUG" do
   #  subject(:game_put) { described_class.new }
   #  xit do

@@ -21,7 +21,7 @@ class Board
     end
   end
 
-  def choose_type
+  def choose_type(type = nil)
     puts "Choose a game:"
     puts "1: Player vs. Player"
     puts "2: Player vs. Cpu"
@@ -50,6 +50,7 @@ class Board
       if op_in_check?(current)
         puts "black team is in check" if current == "white"
         puts "white team is in check" if current == "black"
+        sleep 2
       end
     end
     traverse { |node| set_moves(node) }
@@ -63,15 +64,20 @@ class Board
       turn("white")
       traverse { |node| set_moves(node) }
       @last_player = "white"
+      traverse { |node| set_moves(node) }
+      p op_in_check?("white")
       if op_in_check?("white")
         puts "black team is in check"
+        sleep 2
       end
       break if checkmate?("white")
       traverse { |node| set_moves(node) }
       computer_turn("black")
       @last_player = "black"
+      traverse { |node| set_moves(node) }
       if op_in_check?("black")
         puts "white team is in check"
+        sleep 2
       end
       break if checkmate?("black")
     end
@@ -94,6 +100,7 @@ class Board
     selected_node_two.piece_held = piece
     selected_node.piece_held = nil
     piece.node = selected_node_two
+    traverse { |node| set_moves(node) }
   end
 
   def op_in_check?(team)
@@ -145,7 +152,6 @@ class Board
         #p "3"
         return false
       elsif king_safe_moves.length == 0 && op_in_check?(team)
-        #p "4"
         return true
       end
     end
@@ -256,6 +262,10 @@ class Board
       end
 
       if node.piece_held.class == Pawn
+        pointer_arr.filter! do |next_node|
+          next_node.piece_held.nil?
+        end
+
         case "#{node.piece_held.team}"
         when "white"
           eater_moves = [
@@ -326,7 +336,7 @@ class Board
 
     selected_node = @field[x][y]
 
-    until selected_node.piece_held.team == team && selected_node.piece_held.moves.length != 0
+    until selected_node&.piece_held&.team == team && selected_node.piece_held.moves.length != 0
       puts "Invalid choice"
       player_choice = ""
       until player_choice&.match(/[a-h][1-8]/)
@@ -360,8 +370,8 @@ class Board
       end
     end
 
-    until selected_node_two&.piece_held.nil? && selected_node.piece_held.moves.any?(selected_node_two)
-      until selected_node_two&.piece_held&.team == team
+    until selected_node.piece_held.moves.any?(selected_node_two)
+      until selected_node.piece_held.moves.any?(selected_node_two)
         puts "Try again:"
         next_node = ""
         until next_node&.match(/[a-h][1-8]/)
@@ -372,6 +382,10 @@ class Board
           selected_node_two = @field[x][y]
         end
       end
+      #sleep 1
+      #puts "sleeping"
+      #p "#{selected_node.piece_held.moves.map(&:index)}"
+      #p "#{selected_node_two.index}"
     end
     selected_node_two.piece_held = selected_node.piece_held
     selected_node_two.piece_held.node = selected_node_two
